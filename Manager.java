@@ -6,23 +6,38 @@ public class Manager{
     public static int GET_COUNTER = 0;//counter for 'Delete Contact' it counts the location of a needed node for remove()
 
     public void menu() {
-        int intInput;//for menu loop
+        int intInput = 9999999;//for menu loop
         ListNode head = new ListNode();
         String name;
         String address;
         String city;
         String phoneNum;
         do {
+            System.out.println("\nMenu");
             System.out.println("'1' - Add New Contact");
             System.out.println("'2' - View Contacts");
             System.out.println("'3' - Modify Contact");
             System.out.println("'4' - Delete Contact");
             System.out.println("'5' - Exit");
-            System.out.print("Your Choice: ");
+            
             Scanner scn = new Scanner(System.in);
-            intInput = scn.nextInt();
+            boolean intCheck = true;
+
+            do {//check input
+                try {
+                    System.out.print("Your Choice: ");
+                    intInput = scn.nextInt();
+                    intCheck = true;
+                } catch (RuntimeException re) {
+                    intCheck = false;
+                    scn.next();
+                    System.out.println("Enter A Number!");
+                }
+            } while(!intCheck);
+
             switch (intInput) {
                 case 1://Add New Contact
+                    
                     Scanner scn1 = new Scanner(System.in);
 
                     System.out.print("Name: ");
@@ -40,23 +55,54 @@ public class Manager{
                     add(head, name, address, city, phoneNum);
                     break;
                 case 2://View Contacts
+
+                    if (countNodes(head) <= 1) {//check contact availability
+                        System.out.println("Add At Least One Contact!");
+                        break;
+                    }     
+
                     printList(head);
                     break;
-                case 3://Modify Contact             
+                case 3://Modify Contact   
+                
+                    if (countNodes(head) <= 1) {//check contact availability
+                        System.out.println("Add At Least One Contact!");
+                        break;
+                    }
+
                     System.out.print("Enter The Name Of The Contact: ");
                     Scanner scn3 = new Scanner(System.in);
                     name = scn3.nextLine();
-                    ListNode current = get(head, name);
+                    ListNode current;
+
+                    try {//check if contact exist
+                        current = get(head, name);
+                    } catch (NullPointerException npe) {
+                        System.out.println("Contact Doesn't Exist!");
+                        break;
+                    }
                     printNode(current);
-                    int intInput2;
+                    int intInput2 = 0;
                     do {//modifing a node
+                        System.out.println("\nEditing");
                         System.out.println("'1' - Change Name");
                         System.out.println("'2' - Change Address");
                         System.out.println("'3' - Change City, State, Zip Code");
                         System.out.println("'4' - Change Phone Number");
                         System.out.println("'5' - Exit");
-                        System.out.print("Your Choice: ");
-                        intInput2 = scn.nextInt();
+                
+                        do {//check input
+                            try {
+                                System.out.print("Your Choice: ");
+                                intInput2 = scn.nextInt();
+                                intCheck = true;
+                            } catch (RuntimeException re) {
+                                intCheck = false;
+                                scn.next();
+                                System.out.println("Enter A Number!");
+                            }
+                        } while(!intCheck);
+                        
                         switch (intInput2) {
                             case 1:
                                 System.out.print("Name: ");
@@ -80,7 +126,7 @@ public class Manager{
                                 break;
                             case 5:
                                 break;                    
-                            default:
+                            default://input validation
                                 System.out.println("Enter A Valid Number!");
                                 break;
                         }
@@ -88,24 +134,38 @@ public class Manager{
                     printNode(current);
                     break;
                 case 4://Delete Contact
+
+                    if (countNodes(head) <= 1) {//check contact availability
+                        System.out.println("Add At Least One Contact!");
+                        break;
+                    }
+                    
                     System.out.print("Enter The Name Of The Contact: ");
                     Scanner scn4 = new Scanner(System.in);
                     name = scn4.nextLine();
                     GET_COUNTER = 1;
-                    ListNode currentLocal = get(head, name);
+                    ListNode currentLocal;
+
+                    try {//check if contact exist
+                        currentLocal = get(head, name);
+                    } catch (NullPointerException npe) {
+                        System.out.println("Contact Doesn't Exist!");
+                        break;
+                    }
+
                     printNode(currentLocal);
                     remove(head, GET_COUNTER);
                     break;
                 case 5:
                     break;
-                default:
+                default://input validation
                     System.out.println("Be careful!");
                     break;
             }
         } while (intInput != 5);     
     }//end of menu
 
-    //counts number of nodes(not used)
+    //counts number of nodes
     public int countNodes(ListNode head) {
         int counter = 1;
         ListNode current = head;
@@ -143,7 +203,8 @@ public class Manager{
     }
 
     //add with data to a specific location
-    public void add(ListNode head, int index, String name, String address, String city, String phoneNum) {
+    public void add(ListNode head, int index, String name, String address, String city, 
+                                                                         String phoneNum) {
         if (index == 0) {
             head = new ListNode(head, name, address, city, phoneNum);
         } else {
@@ -170,6 +231,7 @@ public class Manager{
     //print all nodes exept the 1st one
     public void printList(ListNode head) {
         ListNode current = head.next;
+        System.out.println("\nPhone Book");
         while (current != null) {
             System.out.print(current.name + " ");
             System.out.print(current.address + " ");

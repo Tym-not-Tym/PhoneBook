@@ -23,37 +23,5 @@ public class ListNode{
         this.address = address;
         this.phoneNum = phoneNum;
         next = null;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }    
-
-    public viod setAddress(String address) {
-        this.address = address;
-    }    
-
-    public viod setCity(String city) {
-        this.city = city;
-    }    
-
-    public viod setPhone(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }    
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getPhone() {
-        return phoneNum;
-    }    
+    } 
 }
